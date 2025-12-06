@@ -22,6 +22,7 @@ import {
   Trophy,
   UsersRound,
   ChevronLeft,
+  X,
 } from "lucide-react";
 
 interface NavItem {
@@ -41,8 +42,8 @@ const navigation: NavCategory[] = [
   {
     name: "Operações",
     items: [
-      { name: "Painel de Pedidos", href: "/dashboard", icon: ShoppingCart },
-      { name: "Dashboard", href: "/dashboard/analytics", icon: LayoutDashboard },
+      { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+      { name: "Painel de Pedidos", href: "/dashboard/pedidos", icon: ShoppingCart },
       { name: "Caixa", href: "/dashboard/caixa", icon: CreditCard },
       { name: "Mesas", href: "/dashboard/mesas", icon: UtensilsCrossed },
     ],
@@ -95,9 +96,10 @@ const navigation: NavCategory[] = [
 interface SidebarProps {
   collapsed: boolean;
   onCollapse: (collapsed: boolean) => void;
+  onMobileClose?: () => void;
 }
 
-export function Sidebar({ collapsed, onCollapse }: SidebarProps) {
+export function Sidebar({ collapsed, onCollapse, onMobileClose }: SidebarProps) {
   const pathname = usePathname();
   const [expandedCategories, setExpandedCategories] = useState<string[]>(
     navigation.map((cat) => cat.name)
@@ -126,13 +128,13 @@ export function Sidebar({ collapsed, onCollapse }: SidebarProps) {
 
   return (
     <aside
-      className={`fixed left-0 top-0 z-50 h-screen border-r border-gray-200 bg-white transition-all duration-300 ${
+      className={`h-screen border-r border-gray-200 bg-white transition-all duration-300 ${
         collapsed ? "w-16" : "w-64"
       }`}
     >
       <div className="flex h-full flex-col">
         {/* Logo */}
-        <div className={`flex h-16 items-center px-4 ${collapsed ? "justify-center" : ""}`}>
+        <div className={`flex h-16 items-center justify-between px-4 ${collapsed ? "justify-center" : ""}`}>
           <div className="flex items-center gap-2 overflow-hidden">
             <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-amber-500 to-orange-600">
               <UtensilsCrossed className="h-4 w-4 text-white" />
@@ -145,12 +147,21 @@ export function Sidebar({ collapsed, onCollapse }: SidebarProps) {
               Del Match
             </span>
           </div>
+          {/* Botão fechar - apenas mobile */}
+          {onMobileClose && (
+            <button
+              onClick={onMobileClose}
+              className="md:hidden flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          )}
         </div>
 
-        {/* Botão flutuante de collapse */}
+        {/* Botão flutuante de collapse - apenas desktop */}
         <button
           onClick={() => onCollapse(!collapsed)}
-          className="absolute -right-3 top-7 z-50 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border border-gray-200 bg-white text-gray-400 shadow-sm transition-colors hover:bg-gray-50 hover:text-gray-600"
+          className="hidden md:flex absolute -right-3 top-[20px] z-50 h-6 w-6 cursor-pointer items-center justify-center rounded-full border border-gray-200 bg-white text-gray-400 shadow-sm transition-colors hover:bg-gray-50 hover:text-gray-600"
         >
           <ChevronLeft
             className={`h-3.5 w-3.5 transition-transform ${

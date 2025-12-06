@@ -13,9 +13,14 @@ import {
   Clock,
   ShoppingBag,
   Ban,
+  Menu,
 } from "lucide-react";
 
-export function Header() {
+interface HeaderProps {
+  onMenuClick?: () => void;
+}
+
+export function Header({ onMenuClick }: HeaderProps) {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showDeliverySettings, setShowDeliverySettings] = useState(false);
 
@@ -27,38 +32,48 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-gray-200 bg-white">
-      <div className="flex h-16 items-center justify-between px-6">
-        {/* Lado esquerdo - Status do estabelecimento */}
-        <div className="flex items-center">
+      <div className="flex h-14 sm:h-16 items-center justify-between px-3 sm:px-6">
+        {/* Lado esquerdo - Menu hambúrguer + Status */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          {/* Botão hambúrguer - apenas mobile */}
+          <button
+            onClick={onMenuClick}
+            className="flex md:hidden h-9 w-9 cursor-pointer items-center justify-center rounded-lg text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+          
           {estabelecimentoFechado ? (
-            <span className="flex items-center gap-1.5 rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700">
+            <span className="flex items-center gap-1.5 rounded-full bg-red-100 px-2 sm:px-3 py-1 text-xs font-medium text-red-700">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-500" />
-              Estabelecimento fechado
+              <span className="hidden xs:inline">Estabelecimento fechado</span>
+              <span className="xs:hidden">Fechado</span>
             </span>
           ) : (
-            <span className="flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
+            <span className="flex items-center gap-1.5 rounded-full bg-green-100 px-2 sm:px-3 py-1 text-xs font-medium text-green-700">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-500" />
-              Recebendo pedidos
+              <span className="hidden xs:inline">Recebendo pedidos</span>
+              <span className="xs:hidden">Aberto</span>
             </span>
           )}
         </div>
 
         {/* Lado direito */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           {/* Configurações de Entrega */}
           <div className="relative">
             <button
               onClick={() => setShowDeliverySettings(!showDeliverySettings)}
-              className={`flex cursor-pointer items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all ${
+              className={`flex cursor-pointer items-center gap-1 sm:gap-2 rounded-lg px-2 sm:px-4 py-1.5 sm:py-2 text-sm font-medium transition-all ${
                 showDeliverySettings
                   ? "bg-amber-50 text-amber-700"
                   : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
               }`}
             >
               <Truck className="h-4 w-4" />
-              <span className="hidden sm:inline">Configurações de Entrega</span>
+              <span className="hidden lg:inline">Configurações de Entrega</span>
               <ChevronDown
-                className={`h-4 w-4 transition-transform ${
+                className={`hidden lg:block h-4 w-4 transition-transform ${
                   showDeliverySettings ? "rotate-180" : ""
                 }`}
               />
@@ -68,10 +83,10 @@ export function Header() {
             {showDeliverySettings && (
               <>
                 <div
-                  className="fixed inset-0 z-10"
+                  className="fixed inset-0 z-10 bg-black/20 sm:bg-transparent"
                   onClick={() => setShowDeliverySettings(false)}
                 />
-                <div className="absolute right-0 top-full z-20 mt-2 w-80 overflow-hidden rounded-xl border border-gray-200 bg-white p-4 shadow-lg">
+                <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 sm:absolute sm:left-auto sm:top-full sm:right-0 sm:translate-x-0 sm:translate-y-0 z-20 sm:mt-2 w-[calc(100%-2rem)] sm:w-80 max-w-80 overflow-hidden rounded-xl border border-gray-200 bg-white p-4 shadow-lg">
                   <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold text-gray-900">
                     <Truck className="h-4 w-4 text-amber-600" />
                     Configurações de Entrega
@@ -199,7 +214,7 @@ export function Header() {
           </button>
 
           {/* Divisor */}
-          <div className="mx-2 h-6 w-px bg-gray-200" />
+          <div className="hidden sm:block mx-2 h-6 w-px bg-gray-200" />
 
           {/* Perfil do usuário */}
           <div className="relative">
