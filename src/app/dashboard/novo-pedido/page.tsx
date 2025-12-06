@@ -209,6 +209,7 @@ export default function NovoPedidoPage() {
   const [customerPhone, setCustomerPhone] = useState("");
   const [deliveryType, setDeliveryType] = useState<"delivery" | "pickup" | "dine-in">("delivery");
   const [markAsDelivered, setMarkAsDelivered] = useState(false);
+  const [showMobileCart, setShowMobileCart] = useState(false);
 
   // Filtrar produtos
   const filteredProducts = mockProducts.filter((product) => {
@@ -468,7 +469,10 @@ export default function NovoPedidoPage() {
 
       {/* Carrinho Mobile (FAB) */}
       <div className="md:hidden fixed bottom-20 right-4">
-        <button className="flex h-14 w-14 cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-xl shadow-orange-500/30">
+        <button 
+          onClick={() => setShowMobileCart(true)}
+          className="flex h-14 w-14 cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-xl shadow-orange-500/30"
+        >
           <ShoppingCart className="h-6 w-6" />
           {cart.length > 0 && (
             <span className="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
@@ -477,6 +481,123 @@ export default function NovoPedidoPage() {
           )}
         </button>
       </div>
+
+      {/* Modal Carrinho Mobile */}
+      {showMobileCart && (
+        <>
+          <div 
+            className="md:hidden fixed inset-0 z-50 bg-black/50"
+            onClick={() => setShowMobileCart(false)}
+          />
+          <div className="md:hidden fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-auto rounded-t-2xl bg-white">
+            {/* Header */}
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-gray-100 bg-white p-4">
+              <div className="flex items-center gap-2">
+                <h2 className="text-lg font-bold text-gray-900">Carrinho</h2>
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-amber-100 text-xs font-semibold text-amber-700">
+                  {cart.length}
+                </span>
+              </div>
+              <button 
+                onClick={() => setShowMobileCart(false)}
+                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {/* Cliente */}
+            <div className="border-b border-gray-100 p-4">
+              <label className="mb-2 block text-sm font-medium text-gray-700">Cliente</label>
+              <div className="relative">
+                <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Celular ou nome do cliente..."
+                  value={customerPhone}
+                  onChange={(e) => setCustomerPhone(e.target.value)}
+                  className="w-full rounded-xl border border-gray-200 py-2.5 pl-10 pr-4 text-sm text-gray-900 placeholder-gray-400 outline-none transition-all focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
+                />
+              </div>
+            </div>
+
+            {/* Tipo de Entrega */}
+            <div className="border-b border-gray-100 p-4">
+              <label className="mb-3 block text-sm font-medium text-gray-700">Tipo de Pedido</label>
+              <div className="grid grid-cols-3 gap-2">
+                {[
+                  { id: "delivery", label: "Delivery", icon: Truck },
+                  { id: "pickup", label: "Retirada", icon: Store },
+                  { id: "dine-in", label: "Local", icon: Utensils },
+                ].map((type) => (
+                  <button
+                    key={type.id}
+                    onClick={() => setDeliveryType(type.id as typeof deliveryType)}
+                    className={`flex cursor-pointer flex-col items-center gap-1 rounded-xl p-3 text-xs font-medium transition-all ${
+                      deliveryType === type.id
+                        ? "bg-amber-50 text-amber-700 border-2 border-amber-500"
+                        : "bg-gray-50 text-gray-600 border-2 border-transparent hover:bg-gray-100"
+                    }`}
+                  >
+                    <type.icon className="h-5 w-5" />
+                    {type.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Itens */}
+            <div className="p-4">
+              {cart.length > 0 ? (
+                <div className="space-y-2">
+                  {cart.map((item) => (
+                    <CartItemRow
+                      key={item.id}
+                      item={item}
+                      onUpdateQuantity={(qty) => updateCartQuantity(item.id, qty)}
+                      onRemove={() => removeFromCart(item.id)}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-8">
+                  <ShoppingCart className="h-12 w-12 text-gray-300" />
+                  <p className="mt-2 text-sm text-gray-500">Carrinho vazio</p>
+                </div>
+              )}
+            </div>
+
+            {/* Totais e Botão */}
+            <div className="sticky bottom-0 border-t border-gray-100 bg-white p-4">
+              <div className="mb-4 space-y-2 text-sm">
+                <div className="flex justify-between text-gray-600">
+                  <span>Subtotal</span>
+                  <span>R$ {subtotal.toFixed(2).replace(".", ",")}</span>
+                </div>
+                {deliveryType === "delivery" && (
+                  <div className="flex justify-between text-gray-600">
+                    <span>Taxa de Entrega</span>
+                    <span>R$ {deliveryFee.toFixed(2).replace(".", ",")}</span>
+                  </div>
+                )}
+                <div className="flex justify-between text-base font-bold text-gray-900">
+                  <span>Total</span>
+                  <span>R$ {total.toFixed(2).replace(".", ",")}</span>
+                </div>
+              </div>
+              <button
+                disabled={cart.length === 0}
+                className="w-full cursor-pointer rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 px-4 py-3.5 text-sm font-semibold text-white shadow-lg shadow-green-500/25 transition-all hover:shadow-xl hover:shadow-green-500/30 hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none"
+              >
+                <span className="flex items-center justify-center gap-2">
+                  <CreditCard className="h-4 w-4" />
+                  Escolher Forma de Pagamento
+                </span>
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
