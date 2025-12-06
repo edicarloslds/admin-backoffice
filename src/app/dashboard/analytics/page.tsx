@@ -21,6 +21,12 @@ import {
   Cake,
   Award,
   Plus,
+  Copy,
+  Smartphone,
+  Share2,
+  ChevronLeft,
+  ChevronRight,
+  Camera,
 } from "lucide-react";
 
 // Componente de Card de Estatística
@@ -78,7 +84,7 @@ function StatCard({
         <div className="space-y-1">
           <p className="text-sm font-medium text-gray-500">{title}</p>
           <p className="text-2xl font-bold text-gray-900">{value}</p>
-          {subtitle && <p className="text-xs text-gray-400">{subtitle}</p>}
+          {subtitle && <p className="text-xs font-medium text-gray-400">{subtitle}</p>}
         </div>
         <div
           className={`flex h-10 w-10 items-center justify-center rounded-lg ${getIconStyles()}`}
@@ -101,7 +107,7 @@ function StatCard({
             {trend.isPositive ? "+" : ""}
             {trend.value}%
           </span>
-          <span className="text-xs text-gray-400">vs período anterior</span>
+          <span className="text-xs font-medium text-gray-400">vs período anterior</span>
         </div>
       )}
     </div>
@@ -132,7 +138,7 @@ function CompactCard({
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-medium text-gray-500">{title}</p>
         <p className="text-lg font-bold text-gray-900">{value}</p>
-        {subtitle && <p className="text-xs text-gray-400">{subtitle}</p>}
+        {subtitle && <p className="text-xs font-medium text-gray-400">{subtitle}</p>}
       </div>
     </div>
   );
@@ -257,7 +263,7 @@ function TotalsByType() {
             ))}
           </div>
           <div className="mt-3 border-t border-emerald-100 pt-3">
-            <p className="text-xs text-gray-400">Economia de R$ 0,00</p>
+            <p className="text-xs font-medium text-gray-400">Economia de R$ 0,00</p>
           </div>
         </div>
 
@@ -282,7 +288,7 @@ function TotalsByType() {
             ))}
           </div>
           <div className="mt-3 border-t border-rose-100 pt-3">
-            <p className="text-xs text-gray-400">Economia de R$ 0,00</p>
+            <p className="text-xs font-medium text-gray-400">Economia de R$ 0,00</p>
           </div>
         </div>
       </div>
@@ -356,7 +362,7 @@ function ConversionCard({
       <div className="min-w-0 flex-1">
         <p className="text-sm font-medium text-gray-500">{title}</p>
         <p className="text-xl font-bold text-gray-900">{value}</p>
-        <p className="text-xs text-gray-400">Pedidos: {orders}</p>
+        <p className="text-xs font-medium text-gray-400">Pedidos: {orders}</p>
       </div>
       <button className="flex cursor-pointer items-center gap-1 rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-50">
         <Plus className="h-3 w-3" />
@@ -366,9 +372,185 @@ function ConversionCard({
   );
 }
 
+// Componente de QR Code
+function QrCodeCard({ title, subtitle }: { title: string; subtitle?: string }) {
+  return (
+    <div className="flex h-full flex-col items-center justify-between rounded-xl border border-gray-100 bg-white p-6 transition-all hover:shadow-lg">
+      <div className="mb-4 text-center">
+        <h4 className="font-bold text-gray-900">{title}</h4>
+        {subtitle && <p className="text-xs font-medium text-gray-400">{subtitle}</p>}
+      </div>
+      
+      {/* Simulação Visual de QR Code Moderno */}
+      <div className="relative mb-6 flex h-48 w-48 items-center justify-center rounded-xl border-2 border-gray-900 bg-white p-2">
+        {/* Cantos do QR Code */}
+        <div className="absolute left-2 top-2 h-8 w-8 border-l-4 border-t-4 border-gray-900"></div>
+        <div className="absolute right-2 top-2 h-8 w-8 border-r-4 border-t-4 border-gray-900"></div>
+        <div className="absolute bottom-2 left-2 h-8 w-8 border-b-4 border-l-4 border-gray-900"></div>
+        
+        {/* Padrão interno simulado com SVG */}
+        <svg className="h-full w-full text-gray-900" viewBox="0 0 100 100" fill="currentColor">
+          <path d="M15 15h20v20h-20z M65 15h20v20h-20z M15 65h20v20h-20z" />
+          <path d="M40 15h5v5h-5z M50 15h5v5h-5z M60 15h5v5h-5z" opacity="0.8" />
+          <path d="M40 25h5v5h-5z M50 25h5v5h-5z M60 25h5v5h-5z" opacity="0.6" />
+          <path d="M40 35h5v5h-5z M50 35h5v5h-5z M60 35h5v5h-5z" opacity="0.8" />
+          <path d="M15 40h20v5h-20z M40 40h5v5h-5z M50 40h20v20h-20z" />
+          <path d="M70 40h15v5h-15z M85 40h5v25h-5z M70 50h10v10h-10z" />
+          <path d="M40 50h5v15h-5z M45 60h15v5h-15z M15 50h20v10h-20z" opacity="0.7" />
+          <path d="M40 70h25v5h-25z M70 70h15v15h-15z M40 80h25v5h-25z" />
+        </svg>
+
+        {/* Logo Central (Simulada com ícone da loja) */}
+        <div className="absolute left-1/2 top-1/2 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-lg bg-orange-500 text-white shadow-sm">
+          <Camera className="h-6 w-6" />
+        </div>
+      </div>
+
+      <button className="flex w-full items-center justify-center gap-2 rounded-lg bg-gray-900 py-2.5 text-sm font-medium text-white transition-colors hover:bg-gray-800">
+        <Download className="h-4 w-4" />
+        Baixar QR Code
+      </button>
+    </div>
+  );
+}
+
+// Componente de Sugestão de Resposta
+function ResponseCard() {
+  const [copied, setCopied] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const responses = [
+    {
+      id: 1,
+      text: "👋 Olá! 📲 Faça seu pedido em nosso cardápio online 👉 https://lojaexemplo.delmatch.com.br é muito rápido e simples! Não precisa fazer cadastro. Aguardamos seu pedido! 💙",
+      display: (
+        <>
+          👋 Olá! 📲 Faça seu pedido em nosso cardápio online 👉 <span className="text-blue-500 font-medium">link.loja</span> é muito rápido e simples! Não precisa fazer cadastro.
+          <br /><br />
+          Qualquer dúvida estamos por aqui, aguardamos o seu pedido 💙
+        </>
+      )
+    },
+    {
+      id: 2,
+      text: "🍕 Hoje é dia de Pizza! Aproveite nossa promoção especial de entrega grátis para pedidos acima de R$ 50,00. Confira no cardápio: https://lojaexemplo.delmatch.com.br 🛵",
+      display: (
+        <>
+          🍕 Hoje é dia de Pizza! Aproveite nossa promoção especial de entrega grátis para pedidos acima de R$ 50,00.
+          <br /><br />
+          Confira no cardápio: <span className="text-blue-500 font-medium">link.loja</span> 🛵
+        </>
+      )
+    },
+    {
+      id: 3,
+      text: "⏰ Seu pedido está quase pronto! Acabamos de colocar no forno e em breve o entregador sairá para levar até você. Obrigado pela preferência! 😋",
+      display: (
+        <>
+          ⏰ Seu pedido está quase pronto! Acabamos de colocar no forno e em breve o entregador sairá para levar até você.
+          <br /><br />
+          Obrigado pela preferência! 😋
+        </>
+      )
+    }
+  ];
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(responses[currentIndex].text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const nextResponse = () => {
+    setCurrentIndex((prev) => (prev + 1) % responses.length);
+    setCopied(false);
+  };
+
+  const prevResponse = () => {
+    setCurrentIndex((prev) => (prev - 1 + responses.length) % responses.length);
+    setCopied(false);
+  };
+
+  return (
+    <div className="flex h-full flex-col rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+      <div className="mb-6 flex items-center justify-between border-b border-gray-100 pb-4">
+        <div className="flex items-center gap-2">
+          <div className="rounded-lg bg-emerald-100 p-2 text-emerald-600">
+            <Smartphone className="h-5 w-5" />
+          </div>
+          <div>
+            <h4 className="font-bold text-gray-900">Respostas Automáticas</h4>
+            <p className="text-xs text-gray-500">Sugestão para enviar aos clientes</p>
+          </div>
+        </div>
+        <button 
+          onClick={handleCopy}
+          className={`group flex cursor-pointer items-center gap-2 rounded-lg border px-4 py-2 text-xs font-semibold transition-all shadow-sm ${
+            copied 
+            ? "border-emerald-200 bg-emerald-100 text-emerald-700" 
+            : "border-emerald-200 bg-emerald-50 text-emerald-600 hover:bg-emerald-100 hover:border-emerald-300"
+          }`}
+        >
+          {copied ? (
+            <>
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              Copiado!
+            </>
+          ) : (
+            <>
+              <Copy className="h-3.5 w-3.5" />
+              Copiar
+            </>
+          )}
+        </button>
+      </div>
+
+      <div className="relative flex-1 rounded-xl bg-gray-50 p-4">
+        {/* Navegação e Balão */}
+        <div className="flex items-center gap-2">
+          <button 
+            onClick={prevResponse}
+            className="flex h-8 w-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-full bg-white text-gray-400 shadow-sm transition-colors hover:bg-gray-100 hover:text-gray-600"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+
+          <div className="flex-1 rounded-2xl rounded-tl-none bg-white p-4 shadow-sm border border-gray-100 min-h-[120px] flex items-center">
+            <p className="text-sm leading-relaxed text-gray-600 w-full">
+              {responses[currentIndex].display}
+            </p>
+          </div>
+
+          <button 
+            onClick={nextResponse}
+            className="flex h-8 w-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-full bg-white text-gray-400 shadow-sm transition-colors hover:bg-gray-100 hover:text-gray-600"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
+        
+        {/* Indicadores de slide */}
+        <div className="mt-4 flex justify-center gap-1.5">
+          {responses.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setCurrentIndex(idx)}
+              className={`h-2 w-2 rounded-full transition-all ${
+                idx === currentIndex ? "bg-emerald-500 w-4" : "bg-gray-200 hover:bg-gray-300"
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function AnalyticsPage() {
   const [dateRange, setDateRange] = useState("06/12/2024 - 06/12/2025");
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [performanceDateRange, setPerformanceDateRange] = useState("06/12/2024 - 06/12/2025");
+  const [showPerformanceDatePicker, setShowPerformanceDatePicker] = useState(false);
 
   return (
     <div className="space-y-6">
@@ -555,9 +737,57 @@ export default function AnalyticsPage() {
 
       {/* Funil e Totais */}
       <div className="mt-12 border-t border-gray-100 pt-8">
-        <h2 className="mb-6 text-lg font-semibold text-gray-900">
-          Performance de Vendas e Conversão
-        </h2>
+        <div className="mb-6 flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-gray-900">
+            Performance de Vendas e Conversão
+          </h2>
+          <div className="relative">
+            <button
+              onClick={() => setShowPerformanceDatePicker(!showPerformanceDatePicker)}
+              className="flex cursor-pointer items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition-all hover:bg-gray-50"
+            >
+              <Calendar className="h-4 w-4 text-gray-400" />
+              <span>{performanceDateRange}</span>
+              <ChevronDown
+                className={`h-4 w-4 text-gray-400 transition-transform ${
+                  showPerformanceDatePicker ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            {showPerformanceDatePicker && (
+              <>
+                <div
+                  className="fixed inset-0 z-10"
+                  onClick={() => setShowPerformanceDatePicker(false)}
+                />
+                <div className="absolute right-0 top-full z-20 mt-2 w-64 rounded-xl border border-gray-200 bg-white p-4 shadow-lg">
+                  <div className="space-y-2">
+                    {[
+                      "Hoje",
+                      "Últimos 7 dias",
+                      "Últimos 30 dias",
+                      "Este mês",
+                      "Último mês",
+                      "Este ano",
+                    ].map((period) => (
+                      <button
+                        key={period}
+                        onClick={() => {
+                          setPerformanceDateRange(period);
+                          setShowPerformanceDatePicker(false);
+                        }}
+                        className="w-full cursor-pointer rounded-lg px-3 py-2 text-left text-sm text-gray-700 transition-colors hover:bg-gray-50"
+                      >
+                        {period}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
         <div className="grid gap-6 lg:grid-cols-2">
           <FunnelChart />
           <TotalsByType />
@@ -598,6 +828,30 @@ export default function AnalyticsPage() {
             iconBgColor="bg-sky-100"
             iconColor="text-sky-600"
           />
+        </div>
+      </div>
+
+      {/* Seção de Divulgação (QR Codes e Respostas) */}
+      <div className="mt-12">
+        <h2 className="mb-6 text-lg font-semibold text-gray-900">
+          Ferramentas de Divulgação
+        </h2>
+        <div className="grid gap-6 lg:grid-cols-2">
+          <div>
+            <div className="grid gap-6 sm:grid-cols-2">
+              <QrCodeCard 
+                title="QR Code Delivery" 
+                subtitle="Direciona para o cardápio principal"
+              />
+              <QrCodeCard 
+                title="Visualização do Cardápio" 
+                subtitle="Apenas modo visualização (sem checkout)"
+              />
+            </div>
+          </div>
+          <div>
+            <ResponseCard />
+          </div>
         </div>
       </div>
     </div>
