@@ -43,7 +43,7 @@ const navigation: NavCategory[] = [
     name: "Operações",
     items: [
       { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-      { name: "Painel de Pedidos", href: "/dashboard/pedidos", icon: ShoppingCart },
+      { name: "Painel de Pedidos", href: "/dashboard/painel-pedidos", icon: ShoppingCart },
       { name: "Caixa", href: "/dashboard/caixa", icon: CreditCard },
       { name: "Mesas", href: "/dashboard/mesas", icon: UtensilsCrossed },
     ],
