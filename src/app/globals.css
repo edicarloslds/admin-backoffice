@@ -111,3 +111,8 @@ textarea {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--foreground);
 }
+
+/* Hide scrollbar utility class */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
